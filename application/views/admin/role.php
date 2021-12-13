@@ -30,7 +30,7 @@
                             <td>
                                 <a href="<?= base_url('admin/roleaccess/') . $r['id']; ?>" class="badge bg-warning">access</a>
                                 <a href="" class="badge bg-danger">edit</a>
-                                <a href="" class="badge bg-danger">delete</a>
+                                <a href="<?= base_url('admin/hapusrole/') . $r['id']; ?>" onclick="return confirm('Kamu yakin akan menghapus data ini ?');" class="badge bg-danger">delete</a>
                             </td>
                         </tr>
                         <?php $i++; ?>

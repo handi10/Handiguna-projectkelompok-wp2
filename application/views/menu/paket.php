@@ -7,29 +7,33 @@
     <div class="row">
         <div class="col-lg-6">
 
-            <?= form_error('menu', '<div class="alert alert-danger" role="alert">', '</div>'); ?>
+            <?= form_error('paket', '<div class="alert alert-danger" role="alert">', '</div>'); ?>
 
             <?= $this->session->flashdata('message'); ?>
 
-            <a href="" class="btn btn-primary mb-3" data-toggle="modal" data-target="#newMenuModal">Add New Menu</a>
+            <a href="" class="btn btn-primary mb-3" data-toggle="modal" data-target="#newMenuModal">Tambah Data Paket</a>
 
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Menu</th>
+                        <th scope="col">No</th>
+                        <th scope="col">Nama Paket</th>
+                        <th scope="col">Jangka Waktu</th>
+                        <th scope="col">Biaya</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $i = 1; ?>
-                    <?php foreach ($menu as $m) : ?>
+                    <?php foreach ($paket as $row) : ?>
                         <tr>
                             <th scope="row"><?= $i; ?></th>
-                            <td><?= $m['menu']; ?></td>
+                            <td><?= $row['nama_paket']; ?></td>
+                            <td><?= $row['jangka_waktu']; ?></td>
+                            <td><?= $row['biaya']; ?></td>
                             <td>
                                 <a href="" class="badge bg-success">edit</a>
-                                <a href="<?= base_url('menu/hapusmenu/') . $m['id']; ?>" onclick="return confirm('Kamu yakin akan menghapus data ini ?');" class="badge bg-danger">delete</a>
+                                <a href="<?= base_url('menu/hapuspaket/') . $row['id_paket']; ?>" onclick="return confirm('Kamu yakin akan menghapus data ini ?');" class="badge bg-danger">delete</a>
                             </td>
                         </tr>
                         <?php $i++; ?>
@@ -51,20 +55,31 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="newMenuModalLabel">Add New Menu</h5>
+                <h5 class="modal-title" id="newMenuModalLabel">Tambah Data Paket</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="<?= base_url('menu'); ?>" method="post">
+            <form action="<?= base_url('menu/paket'); ?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="menu" name="menu" placeholder="Menu name">
+                        <input type="text" class="form-control" id="nama_paket" name="nama_paket" placeholder="Nama Paket">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="jangka_waktu">
+                            <option>1 Bulan</option>
+                            <option>3 Bulan</option>
+                            <option>6 Bulan</option>
+                            <option>12 Bulan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="biaya" name="biaya" placeholder="Biaya">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>

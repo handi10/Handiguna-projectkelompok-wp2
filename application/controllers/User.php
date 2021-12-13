@@ -112,4 +112,63 @@ class User extends CI_Controller
             }
         }
     }
+
+    public function pendaftaran()
+    {
+        $data['title'] = 'Pendaftaran';
+        $data['user'] = $this->db->get_where('user', ['email' =>
+        $this->session->userdata('email')])->row_array();
+
+
+        $data['paket'] = $this->db->get('paket')->result_array();
+
+        if ($this->form_validation->run() == false) {
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('user/pendaftaran', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $tgl_pendaftaran = $this->input->post('tgl_pendaftaran');
+            $nama = $this->input->post('nama');
+            $ttl = $this->input->post('ttl');
+            $alamat = $this->input->post('alamat');
+            $no_hp = $this->input->post('no_hp');
+            $pendidikan = $this->input->post('pendidikan');
+            $id_paket = $this->input->post('id_paket');
+
+            // CEK JIKA ADA GAMBAR DI UPLOAD 
+            $upload_image = $_FILES['image']['name'];
+
+            if ($upload_image) {
+                $config['allowed_types'] = 'gif|jpg|png';
+                $config['max_size'] = '2048';
+                $config['upload_path'] = './assets/img/upload/';
+
+                $this->load->library('upload', $config);
+
+                if ($this->upload->do_upload('image')) {
+                    $old_image = $data['user']['image'];
+                    if ($old_image != 'default.jpg') {
+                        unlink(FCPATH . 'assets/img/upload/' . $old_image);
+                    }
+                    $new_image = $this->upload->data('file_name');
+                    $this->db->set('image', $new_image);
+                } else {
+                    echo $this->upload->dispay_errors();
+                }
+            }
+
+            $this->db->set('id_pendaftaran', $data);
+            $this->db->set('tgl_pendaftaran', $tgl_pendaftaran);
+            $this->db->where('nama', $nama);
+            $this->db->update('ttl', $ttl);
+            $this->db->update('alamat', $alamat);
+            $this->db->update('no_hp', $no_hp);
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Your profile has been updated!</div>');
+            redirect('user/pendaftaran');
+        }
+    }
 }

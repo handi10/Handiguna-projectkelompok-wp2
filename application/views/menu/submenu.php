@@ -40,7 +40,7 @@
                             <td><?= $sm['is_active']; ?></td>
                             <td>
                                 <a href="" class="badge bg-success">edit</a>
-                                <a href="" class="badge bg-danger">delete</a>
+                                <a href="<?= base_url('menu/hapussubmenu/') . $sm['id']; ?>" onclick="return confirm('Kamu yakin akan menghapus data ini ?');" class="badge bg-danger">delete</a>
                             </td>
                         </tr>
                         <?php $i++; ?>

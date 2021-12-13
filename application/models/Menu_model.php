@@ -12,4 +12,25 @@ class Menu_model extends CI_Model
                 ";
         return $this->db->query($query)->result_array();
     }
+
+    public function getjoinpaket()
+    {
+        $query = "SELECT pendaftaran.*, paket.*
+                    FROM pendaftaran JOIN paket
+                    ON pendaftaran.id_paket = paket.id_paket      
+                ";
+        return $this->db->query($query)->result_array();
+    }
+
+    public function hapusMenu($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('user_menu');
+    }
+
+    public function hapusSubMenu($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('user_sub_menu');
+    }
 }
