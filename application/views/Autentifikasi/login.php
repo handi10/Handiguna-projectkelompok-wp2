@@ -1,6 +1,11 @@
 <div class="container">
 
-    <!-- Outer Row -->
+<div style="padding-top:50px;padding-left:750px; font-size:20px" >
+<a href="<?= base_url('autentifikasi/home'); ?>" style="color:white">Home | </a>
+<a href="<?= base_url('autentifikasi/about'); ?>" style="color:white">About us |</a>
+<a href="<?= base_url('autentifikasi/contact'); ?>" style="color:white">Contact us |</a>
+<a href="<?= base_url('autentifikasi/index'); ?>" style="color:white">Login</a>
+    <br></div>s
     <div class="row justify-content-center">
 
         <div class="col-xl-5 col-lg-12 col-md-6">
@@ -34,7 +39,7 @@
                                     <hr>
                                 </form>
                                 <div class="text-center">
-                                    <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                    <a class="small" href="<?= base_url('autentifikasi/forgotPassword'); ?>">Forgot Password?</a>
                                 </div>
                                 <div class="text-center">
                                     <a class="small" href="<?= base_url('autentifikasi/registration'); ?>">Create an Account!</a>
@@ -50,13 +55,3 @@
     </div>
 
 </div>
-<br><br><br><br><br><br><br><br>
-
-<div class="text-center">
-<a href="<?= base_url('autentifikasi/home'); ?>" style="color:white">Home | </a>
-<a href="<?= base_url('autentifikasi/about'); ?>" style="color:white">About us |</a>
-<a href="<?= base_url('autentifikasi/contact'); ?>" style="color:white">Contact us</a>
-    <br>
-
-
-                                </div>

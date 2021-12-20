@@ -292,4 +292,26 @@ class Autentifikasi extends CI_Controller
 			redirect('autentifikasi');
 		}
 	}
+
+	public function home()
+	{
+		$this->load->view('templates/auth_header');
+		$this->load->view('autentifikasi/home');
+		$this->load->view('templates/auth_footer');
+	}
+
+	public function about()
+	{
+		$this->load->view('templates/auth_header');
+		$this->load->view('autentifikasi/about');
+		$this->load->view('templates/auth_footer');
+	}
+
+	public function contact()
+	{
+		$this->load->view('templates/auth_header');
+		$this->load->view('autentifikasi/contact');
+		$this->load->view('templates/auth_footer');
+	}
+
 }

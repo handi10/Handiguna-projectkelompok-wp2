@@ -30,11 +30,19 @@ class Admin extends CI_Controller
 
         $data['role'] = $this->db->get('user_role')->result_array();
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('admin/role', $data);
-        $this->load->view('templates/footer');
+        $this->form_validation->set_rules('role', 'Role', 'required');
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('admin/role', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $this->db->insert('user_role', ['role' => $this->input->post('role')]);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">New role added</div>');
+            redirect('admin/role');
+        }
     }
 
     public function roleaccess($role_id)
@@ -74,5 +82,44 @@ class Admin extends CI_Controller
         }
 
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Access Changed!</div>');
+    }
+
+    public function hapusRole($id)
+    {
+        $this->load->model('Role_model');
+        $this->Role_model->hapusRole($id);
+        redirect('admin/role/');
+    }
+
+    public function editRole()
+    {
+
+        $data['title'] = 'Role Edit';
+        $data['user'] = $this->db->get_where('user', ['email' =>
+        $this->session->userdata('email')])->row_array();
+
+        $roleId = $this->uri->segment('3');
+
+        $this->form_validation->set_rules('role', 'Role', 'required');
+
+        $data['role'] = $this->db->get_where('user_role', ['id' => $roleId])->row_array();
+        
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('admin/edit_role', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $role = $this->input->post('role');
+            $roleId = $this->input->post('roleId');
+
+            $this->db->set('role', $role);
+            $this->db->where('id', $roleId);
+            $this->db->update('user_role');
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Edit role success</div>');
+            redirect('admin/role');
+        }
     }
 }

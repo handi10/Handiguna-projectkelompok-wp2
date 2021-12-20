@@ -113,66 +113,67 @@ class User extends CI_Controller
         }
     }
 
-
     public function pendaftaran()
     {
-        $data['title'] = 'Pendaftaran';
-        $data['user'] = $this->db->get_where('user', ['email' =>
+        $this->load->model('Menu_model');  
+        $iduser = $this->db->get_where('user', ['id' =>
+            $this->session->userdata('id')])->row_array();
+        $hasil_user = $this->Menu_model->cek_iduser($iduser);
+
+        if($hasil_user=0))
+        {   
+
+            $data['title'] = 'Pendaftaran';
+            $data['user'] = $this->db->get_where('user', ['email' =>
+                $this->session->userdata('email')])->row_array();
+
+
+            $data['pendaftaran'] = $this->db->get('pendaftaran')->result_array();
+            $data['paket'] = $this->db->get('paket')->result_array();
+
+            $this->form_validation->set_rules('nama', 'nama', 'required');
+            $this->form_validation->set_rules('ttl', 'TTL', 'required');
+            $this->form_validation->set_rules('alamat', 'Alamat', 'required');
+            $this->form_validation->set_rules('no_hp', 'No Hp', 'required');
+            $this->form_validation->set_rules('pendidikan', 'Pendidikan', 'required');
+            $this->form_validation->set_rules('id_paket', 'Paket', 'required');
+
+            if ($this->form_validation->run() == false) {
+
+                $this->load->view('templates/header', $data);
+                $this->load->view('templates/sidebar', $data);
+                $this->load->view('templates/topbar', $data);
+                $this->load->view('user/pendaftaran', $data);
+                $this->load->view('templates/footer');
+            } else {
+                $this->db->insert(
+                    'pendaftaran',
+                    [
+                        'tgl_pendaftaran' => $this->input->post('tgl_pendaftaran'),
+                        'nama' => $this->input->post('nama'),
+                        'ttl' => $this->input->post('ttl'),
+                        'alamat' => $this->input->post('alamat'),
+                        'no_hp' => $this->input->post('no_hp'),
+                        'pendidikan' => $this->input->post('pendidikan'),
+                        'id_paket' => $this->input->post('id_paket'),
+                        'status_pembayaran' => ('Belum Diverifikasi'),
+                        'status_peserta' => ('Belum Aktif'),  
+                        'id_user' => $this->input->post('id_user')
+                    ]
+                );
+
+                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Ditambahkan!</div>');
+                redirect('user/datadiri');
+            }
+        }else{
+           $this->load->model('Menu_model'); 
+           $data['title'] = 'Data Pribadi';
+           $data['user'] = $this->db->get_where('user', ['email' =>
             $this->session->userdata('email')])->row_array();
 
+           $data['data'] = $this->Menu_model->cekData(['email' => $this->session->userdata('email')])->row_array();
 
-        $data['pendaftaran'] = $this->db->get('pendaftaran')->result_array();
-        $data['paket'] = $this->db->get('paket')->result_array();
-
-        $this->form_validation->set_rules('nama', 'nama', 'required');
-        $this->form_validation->set_rules('ttl', 'TTL', 'required');
-        $this->form_validation->set_rules('alamat', 'Alamat', 'required');
-        $this->form_validation->set_rules('no_hp', 'No Hp', 'required');
-        $this->form_validation->set_rules('pendidikan', 'Pendidikan', 'required');
-        $this->form_validation->set_rules('id_paket', 'Paket', 'required');
-
-        if ($this->form_validation->run() == false) {
-
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/topbar', $data);
-            $this->load->view('user/pendaftaran', $data);
-            $this->load->view('templates/footer');
-        } else {
-            $this->db->insert(
-                'pendaftaran',
-                [
-                    'tgl_pendaftaran' => $this->input->post('tgl_pendaftaran'),
-                    'nama' => $this->input->post('nama'),
-                    'ttl' => $this->input->post('ttl'),
-                    'alamat' => $this->input->post('alamat'),
-                    'no_hp' => $this->input->post('no_hp'),
-                    'pendidikan' => $this->input->post('pendidikan'),
-                    'id_paket' => $this->input->post('id_paket'),
-                    'status_pembayaran' => ('Belum Diverifikasi'),
-                    'status_peserta' => ('Belum Aktif'),  
-                    'id_user' => $this->input->post('id_user')
-                ]
-            );
-
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Berhasil Ditambahkan!</div>');
-            redirect('user/riwayatdaftar');
-        }
-    }
-
-
-    public function datadiri()
-    {
-
-        error_reporting(0);
-        $this->load->model('Menu_model'); 
-        $data['title'] = 'Data Pribadi';
-        $data['user'] = $this->db->get_where('user', ['email' =>
-            $this->session->userdata('email')])->row_array();
-
-        $data['data'] = $this->Menu_model->cekData(['email' => $this->session->userdata('email')])->row_array();
-
-        if ($this->form_validation->run() == false) {
+           if ($this->form_validation->run() == false) {
             $this->load->view('templates/header', $data);
             $this->load->view('templates/sidebar', $data);
             $this->load->view('templates/topbar', $data);
@@ -194,25 +195,8 @@ class User extends CI_Controller
             $this->db->update('pendaftaran');
 
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Your profile has been updated!</div>');
-            redirect('user/datadiri');
+            redirect('user/pendaftaran');
         }
     }
-
-    public function riwayatdaftar()
-    {
-        $data['title'] = 'Riwayat Pendaftaran';
-        $data['user'] = $this->db->get_where('user', ['email' =>
-            $this->session->userdata('email')])->row_array();
-        $email=$this->session->userdata('email');
-        $data['pendaftar'] = $this->db->get_where('view_daftar', ['email' => $email])->result_array();
-      
-        if ($this->form_validation->run() == false) {
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/topbar', $data);
-            $this->load->view('user/riwayatdaftar', $data);
-            $this->load->view('templates/footer');
-        }
-    }
-
+}
 }

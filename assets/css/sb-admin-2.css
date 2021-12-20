@@ -67,6 +67,8 @@ body {
   color: #858796;
   text-align: left;
   background-color: #fff;
+  background-image: no-repeat;
+
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
